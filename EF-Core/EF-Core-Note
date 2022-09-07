@@ -1,1 +1,56 @@
 EF Core
+
+---
+O/RMs work by mapping:
+relational database:  primary keys to define that a row is unique
+object-oriented:  unique by their reference
+
+---
+entity: the class as one that EF Core has mapped to the database
+
+DbContext: class  inheriting EF Core’s DbContext and adding properties to to access the database tables and configuring the database modeling
+
+Add-Migration: models your database -> builds commands to create a database that fits that model(at the time that you run your command).
+Update-Database: applies the commands created by the Add-Migration command to your database. If no database exists, Update-Database will create
+one
+
+Alternative:
+context.Database.Migrate update the database
+context.Database.EnsureCreated command to create the database. 
+
+----
+DbSet<T> property refer to a database table
+
+LINQ:
+    + Application’s DbContext property access
+    + A series of LINQ/EF Core commands
+    + The execute command:
+      + foreach statement
+      + collection operation such as ToArray, ToDictionary, ToList, ToListAsync 
+      + First, Any (outermost part)
+      + Load
+---
+Eager loading
+EF Core won’t load any relationships in an entity class unless you ask it to
+Eager loading is specified via two fluent methods, Include and ThenInclude
+The first loads the primary entity
+The second loads the dependent entity
+
+Include followed by a ThenInclude, go deeper than a first-level relationship(can be multiple ThenIncludes)
+Include or ThenInclude was empty -> subsequent ThenIncludes are ignored.
+---
+explicit loading;
+context.Entry(book)
+.Collection(c => c.Reviews).Load();
+context.Entry(book)
+.Reference(r => r.Promotion).Load();
+
+elect loading.
+
+client vs. server
+evaluation, which allows you to include methods in your query that can’t be run on the
+database
+
+---
+Query Object pattern. This pattern is all about
+encapsulating a query, or part of a query, in a method. 
